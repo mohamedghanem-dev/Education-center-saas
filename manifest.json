@@ -1,0 +1,13 @@
+{
+  "name": "سنتر الدروس",
+  "short_name": "EduCRM",
+  "description": "نظام إدارة سنتر الدروس المتكامل",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f7fdf7",
+  "theme_color": "#16a34a",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

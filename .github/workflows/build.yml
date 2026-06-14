@@ -1,0 +1,50 @@
+name: Build Edu CRM
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Force Fix package.json and Icons
+        shell: bash
+        run: |
+          if [ -f package.json ]; then
+            sed -i 's/icon.png/icon.ico/g' package.json
+            sed -i 's/icon_1024.png/icon.ico/g' package.json
+          fi
+          rm -f icon.png icon_1024.png build/icon.png build/icon_1024.png
+          mkdir -p build
+          if [ -f icon.ico ]; then
+            cp icon.ico build/icon.ico
+          fi
+          echo "Icons ready!"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Electron App
+        env:
+          ELECTRON_BUILDER_BINARIES_MIRROR: https://npmmirror.com/mirrors/electron-builder-binaries/
+          ELECTRON_MIRROR: https://npmmirror.com/mirrors/electron/
+        run: npm run build:win -- --publish never
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Edu-CRM-Dist
+          path: dist/
+          retention-days: 30
